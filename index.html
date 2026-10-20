@@ -1,36 +1,228 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>朽一的个人主页</title>
-    <!-- 下面这一块是样式（CSS），就是给网页穿衣服 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朽一 · 我有不朽的渴望</title>
+    <!-- 引入 Google 字体：Playfair Display (花体英文), Noto Serif SC (优雅中文) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* 基础设置：藏青色背景 + 柔和白字 */
         body {
-            background-color: #1a1a1a; /* 深色背景 */
-            color: white;              /* 白色文字 */
-            font-family: sans-serif;   /* 字体 */
-            display: flex;             /* 用来居中的魔法 */
-            justify-content: center;
-            align-items: center;
-            height: 100vh;             /* 占满整个屏幕高度 */
+            background-color: #0B131F; /* 更深邃的藏青 */
+            color: #E2E8F0;
+            font-family: 'Noto Serif SC', serif;
             margin: 0;
-            text-align: center;
+            padding: 60px 15%;
+            line-height: 1.8;
         }
-        h1 {
-            color: #4CAF50;            /* 标题变成绿色 */
+
+        /* 顶部区域 */
+        .header-area {
+            margin-bottom: 60px;
+            text-align: left;
+        }
+
+        /* 朽一 主标题 */
+        .logo {
             font-size: 3em;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #FFFFFF;
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
         }
-        p {
+
+        /* ——我有不朽的渴望 */
+        .slogan {
+            font-size: 1em;
+            font-weight: 400;
+            color: #7A90AB; /* 灰蓝色，低调优雅 */
+            letter-spacing: 2px;
+        }
+
+        /* RUC 和 0827 */
+        .subtitle {
+            font-size: 0.9em;
+            color: #4A6B99;
+            margin-top: 10px;
+            letter-spacing: 4px;
+        }
+
+        /* 文件夹容器（改为单列排版） */
+        .folder-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+        }
+
+        /* 文件夹卡片样式 */
+        details {
+            background-color: #121D2D;
+            border: 1px solid #1F304A;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+        }
+
+        details:hover {
+            border-color: #4A6B99;
+            background-color: #16243A;
+        }
+
+        /* 花体英文字体专属 */
+        summary {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #E2E8F0;
+            padding: 20px 25px;
+            cursor: pointer;
+            outline: none;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+
+        /* 隐藏默认三角形，自定义加号 */
+        summary::-webkit-details-marker { display: none; }
+        summary::after {
+            content: '+';
+            font-family: sans-serif;
             font-size: 1.2em;
-            color: #cccccc;
+            color: #4A6B99;
+            transition: transform 0.4s;
+        }
+        details[open] summary::after {
+            content: '−';
+            transform: rotate(180deg);
+        }
+
+        /* 展开后的内容 */
+        .content {
+            padding: 0 25px 20px 25px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.95em;
+            color: #A0B0C0;
+            border-top: 1px solid #1F304A;
+            margin-top: 5px;
+            padding-top: 15px;
+        }
+
+        .content p { margin: 5px 0; }
+        .content ul { padding-left: 20px; margin: 5px 0; }
+
+        /* 底部动图区域 */
+        .gif-zone {
+            margin-top: 60px;
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        .gif-zone img {
+            width: 300px;
+            border-radius: 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .gif-zone img:hover {
+            opacity: 1;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 768px) {
+            body { padding: 40px 20px; }
+            .logo { font-size: 2em; }
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>你好，我是朽一！</h1>
-        <p>这是我的第一个 GitHub Pages 网页。</p>
-        <p>代码虽少，但这可是通往赛博世界的第一步。</p>
+
+    <!-- 顶部：名字与格言 -->
+    <div class="header-area">
+        <h1 class="logo">
+            朽一
+            <span class="slogan">——我有不朽的渴望</span>
+        </h1>
+        <div class="subtitle">RUC &nbsp;|&nbsp; 0827</div>
     </div>
+
+    <!-- 6个花体文件夹 -->
+    <div class="folder-container">
+        
+        <details>
+            <summary>The First — My World</summary>
+            <div class="content">
+                <p>这里是我的精神世界。在这里，思绪可以无限蔓延，没有边界。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>The Second — My Bonds</summary>
+            <div class="content">
+                <p>关于羁绊、联系与生命中重要的人。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>The Third — My Life</summary>
+            <div class="content">
+                <ul>
+                    <li><strong>星座：</strong> 处女座</li>
+                    <li><strong>MBTI：</strong> INFP</li>
+                    <li><strong>日常：</strong> 读书、发呆、寻找美好的事物。</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>The Moments</summary>
+            <div class="content">
+                <p>一些瞬间的定格。那些不经意间想要永久留存的画面。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Thoughts</summary>
+            <div class="content">
+                <p>关于宇宙、星空、以及一切琐碎日常的思考与碎碎念。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Hobbies</summary>
+            <div class="content">
+                <ul>
+                    <li>🖋️ 书法 (Calligraphy)</li>
+                    <li>📜 诗词 (Poetry)</li>
+                    <li>🎨 国画 (Traditional Painting)</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Scenery</summary>
+            <div class="content">
+                <p>我看过的风景。</p>
+                <!-- 这里预留了风景图的位置，后面你可以自己加 -->
+            </div>
+        </details>
+
+    </div>
+
+    <!-- 底部的森系动态猫猫（已为你放好一张网上的可爱动图链接） -->
+    <div class="gif-zone">
+        <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #4A6B99; margin-bottom: 20px;">Take a deep breath.</p>
+        <!-- 这是一个网上的动图，如果显示不出来，可以看下面的教程换成你自己的 -->
+        <img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="森系小猫">
+    </div>
+
 </body>
 </html>
