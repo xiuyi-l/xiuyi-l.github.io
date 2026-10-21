@@ -1,30 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>朽一 · 我有不朽的渴望</title>
-    <!-- 引入 Google 字体：Playfair Display (花体英文), Noto Serif SC (优雅中文) -->
+    <!-- 引入字体：Playfair Display (花体英文), Noto Serif SC (优雅中文) -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* 基础设置：藏青色背景 + 柔和白字 */
+        /* 基础设置 */
         body {
-            background-color: #0B131F; /* 更深邃的藏青 */
+            background-color: #0B131F; /* 深邃藏青 */
             color: #E2E8F0;
             font-family: 'Noto Serif SC', serif;
             margin: 0;
-            padding: 60px 15%;
+            padding: 40px 5%; /* 整体留白 */
             line-height: 1.8;
+            min-height: 100vh;
         }
 
-        /* 顶部区域 */
+        /* 核心布局：左右两列 */
+        .main-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 40px;
+        }
+
+        /* ================= 左侧区域 ================= */
+        .left-section {
+            flex: 1;
+            max-width: 600px;
+            margin-top: -20px; /* 让“朽一”再往左上角移动一点 */
+        }
+
+        /* 顶部名字与格言 */
         .header-area {
-            margin-bottom: 60px;
-            text-align: left;
+            margin-bottom: 40px;
         }
 
-        /* 朽一 主标题 */
         .logo {
             font-size: 3em;
             font-weight: 700;
@@ -36,51 +52,121 @@
             gap: 15px;
         }
 
-        /* ——我有不朽的渴望 */
         .slogan {
             font-size: 1em;
             font-weight: 400;
-            color: #7A90AB; /* 灰蓝色，低调优雅 */
+            color: #7A90AB;
             letter-spacing: 2px;
         }
 
-        /* RUC 和 0827 */
-        .subtitle {
-            font-size: 0.9em;
-            color: #4A6B99;
-            margin-top: 10px;
-            letter-spacing: 4px;
-        }
-
-        /* 文件夹容器（改为单列排版） */
-        .folder-container {
+        /* 米色卡片容器（并列） */
+        .beige-cards {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 800px;
+            gap: 20px;
         }
 
-        /* 文件夹卡片样式 */
+        /* 米色卡片通用样式 */
+        .card {
+            background-color: #F5F0E6; /* 米色 */
+            color: #2C3E50; /* 深灰蓝字体，对比好看 */
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 轻微阴影，卡片感 */
+            flex: 1;
+        }
+
+        /* --- 第一个卡片：日历 --- */
+        .calendar-card {
+            text-align: center;
+        }
+        
+        .calendar-header {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #8C7A6B; /* 浅咖色 */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #D1C7B8;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* 突显日期数字 */
+        .calendar-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5em;
+            font-weight: bold;
+            line-height: 1;
+            color: #2C3E50;
+        }
+
+        .calendar-month {
+            font-size: 1.2em;
+            color: #8C7A6B;
+            margin-top: 5px;
+        }
+
+        /* --- 第二个卡片：个人信息 --- */
+        .info-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+            color: #2C3E50;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            border-bottom: 1px solid #D1C7B8;
+            padding-bottom: 10px;
+        }
+        
+        .info-card p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #4A5A6A;
+        }
+
+        .info-card .mbti-highlight {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #8C7A6B;
+        }
+
+        /* ================= 右侧区域（文件夹） ================= */
+        .right-section {
+            flex: 1;
+            max-width: 500px;
+            /* 放在右下角的视觉感：给顶部留出空白 */
+            margin-top: 120px; 
+        }
+
+        /* 大卡片框（不明显，靠微弱边框） */
+        .folder-box {
+            background-color: rgba(18, 29, 45, 0.6); /* 半透明深色 */
+            border: 1px solid #1F304A; /* 非常微弱的边框 */
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 文件夹样式 */
         details {
-            background-color: #121D2D;
-            border: 1px solid #1F304A;
-            border-radius: 4px;
-            transition: all 0.4s ease;
+            border-bottom: 1px solid #1F304A;
+            transition: all 0.3s ease;
+        }
+        details:last-child {
+            border-bottom: none; /* 最后一个不需要底边框 */
         }
 
         details:hover {
-            border-color: #4A6B99;
-            background-color: #16243A;
+            background-color: rgba(74, 107, 153, 0.1);
         }
 
-        /* 花体英文字体专属 */
+        /* 花体英文 */
         summary {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 1.4em;
+            font-size: 1.2em;
             font-weight: 600;
             color: #E2E8F0;
-            padding: 20px 25px;
+            padding: 18px 10px;
             cursor: pointer;
             outline: none;
             list-style: none;
@@ -90,12 +176,11 @@
             letter-spacing: 1px;
         }
 
-        /* 隐藏默认三角形，自定义加号 */
         summary::-webkit-details-marker { display: none; }
         summary::after {
             content: '+';
             font-family: sans-serif;
-            font-size: 1.2em;
+            font-size: 1em;
             color: #4A6B99;
             transition: transform 0.4s;
         }
@@ -104,124 +189,126 @@
             transform: rotate(180deg);
         }
 
-        /* 展开后的内容 */
+        /* 展开内容 */
         .content {
-            padding: 0 25px 20px 25px;
-            font-family: 'Noto Serif SC', serif;
-            font-size: 0.95em;
+            padding: 0 10px 15px 10px;
+            font-size: 0.9em;
             color: #A0B0C0;
-            border-top: 1px solid #1F304A;
-            margin-top: 5px;
-            padding-top: 15px;
-        }
-
-        .content p { margin: 5px 0; }
-        .content ul { padding-left: 20px; margin: 5px 0; }
-
-        /* 底部动图区域 */
-        .gif-zone {
-            margin-top: 60px;
-            text-align: center;
-            max-width: 800px;
-        }
-        
-        .gif-zone img {
-            width: 300px;
-            border-radius: 10px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .gif-zone img:hover {
-            opacity: 1;
+            line-height: 1.6;
         }
 
         /* 手机端适配 */
-        @media (max-width: 768px) {
-            body { padding: 40px 20px; }
-            .logo { font-size: 2em; }
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                gap: 60px;
+            }
+            .left-section {
+                max-width: 100%;
+                margin-top: 0;
+            }
+            .right-section {
+                max-width: 100%;
+                margin-top: 0;
+            }
+            .beige-cards {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 顶部：名字与格言 -->
-    <div class="header-area">
-        <h1 class="logo">
-            朽一
-            <span class="slogan">——我有不朽的渴望</span>
-        </h1>
-        <div class="subtitle">RUC &nbsp;|&nbsp; 0827</div>
-    </div>
-
-    <!-- 6个花体文件夹 -->
-    <div class="folder-container">
+    <div class="main-layout">
         
-        <details>
-            <summary>The First — My World</summary>
-            <div class="content">
-                <p>这里是我的精神世界。在这里，思绪可以无限蔓延，没有边界。</p>
+        <!-- 左侧：名字、格言、米色卡片 -->
+        <div class="left-section">
+            <div class="header-area">
+                <h1 class="logo">
+                    朽一
+                    <span class="slogan">——我有不朽的渴望</span>
+                </h1>
             </div>
-        </details>
 
-        <details>
-            <summary>The Second — My Bonds</summary>
-            <div class="content">
-                <p>关于羁绊、联系与生命中重要的人。</p>
+            <!-- 两个米色并列卡片 -->
+            <div class="beige-cards">
+                <!-- 日历卡片（因为日期需要每天变，这里我用的是静态，你可以随时改数字） -->
+                <div class="card calendar-card">
+                    <div class="calendar-header">Today</div>
+                    <div class="calendar-date">21</div>
+                    <div class="calendar-month">October</div>
+                </div>
+
+                <!-- 个人信息卡片 -->
+                <div class="card info-card">
+                    <h3>personal messages</h3>
+                    <p><strong>MBTI:</strong> <span class="mbti-highlight">ENF(P+J)</span></p>
+                    <p style="font-size: 0.85em; margin-top: 10px; color: #7A8A9A;">
+                        "我偏爱电影，偏爱猫，偏爱在深夜里游荡。"
+                    </p>
+                </div>
             </div>
-        </details>
+        </div>
 
-        <details>
-            <summary>The Third — My Life</summary>
-            <div class="content">
-                <ul>
-                    <li><strong>星座：</strong> 处女座</li>
-                    <li><strong>MBTI：</strong> INFP</li>
-                    <li><strong>日常：</strong> 读书、发呆、寻找美好的事物。</li>
-                </ul>
+        <!-- 右侧：大卡片框和七个文件夹 -->
+        <div class="right-section">
+            <div class="folder-box">
+                <!-- 这里去掉了原来 my life 里的列表，换成了优美的句子 -->
+                <details>
+                    <summary>The First — My World</summary>
+                    <div class="content">
+                        <p>我是孤独的旅人，在自己的宇宙里，种满不知名的玫瑰。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>The Second — My Bonds</summary>
+                    <div class="content">
+                        <p>生命是一场巨大的相遇，我珍视那些与我产生共鸣的星光。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>The Third — My Life</summary>
+                    <div class="content">
+                        <p>晨起看云，日落听风。把平淡的日常，过成不具名的诗。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>The Moments</summary>
+                    <div class="content">
+                        <p>那些被时间定格的瞬间，是岁月赠予的琥珀。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Thoughts</summary>
+                    <div class="content">
+                        <p>在信息洪流中保持清醒，在喧嚣世界里留一平米安静的书桌。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Hobbies</summary>
+                    <div class="content">
+                        <ul>
+                            <li>🖋️ 书法 (Calligraphy)</li>
+                            <li>📜 诗词 (Poetry)</li>
+                            <li>🎨 国画 (Traditional Painting)</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Scenery</summary>
+                    <div class="content">
+                        <p>我看过的风景。</p>
+                    </div>
+                </details>
             </div>
-        </details>
+        </div>
 
-        <details>
-            <summary>The Moments</summary>
-            <div class="content">
-                <p>一些瞬间的定格。那些不经意间想要永久留存的画面。</p>
-            </div>
-        </details>
-
-        <details>
-            <summary>Thoughts</summary>
-            <div class="content">
-                <p>关于宇宙、星空、以及一切琐碎日常的思考与碎碎念。</p>
-            </div>
-        </details>
-
-        <details>
-            <summary>Hobbies</summary>
-            <div class="content">
-                <ul>
-                    <li>🖋️ 书法 (Calligraphy)</li>
-                    <li>📜 诗词 (Poetry)</li>
-                    <li>🎨 国画 (Traditional Painting)</li>
-                </ul>
-            </div>
-        </details>
-
-        <details>
-            <summary>Scenery</summary>
-            <div class="content">
-                <p>我看过的风景。</p>
-                <!-- 这里预留了风景图的位置，后面你可以自己加 -->
-            </div>
-        </details>
-
-    </div>
-
-    <!-- 底部的森系动态猫猫（已为你放好一张网上的可爱动图链接） -->
-    <div class="gif-zone">
-        <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #4A6B99; margin-bottom: 20px;">Take a deep breath.</p>
-        <!-- 这是一个网上的动图，如果显示不出来，可以看下面的教程换成你自己的 -->
-        <img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="森系小猫">
     </div>
 
 </body>
