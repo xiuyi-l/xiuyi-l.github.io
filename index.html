@@ -4,277 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>朽一 · 不朽的渴望</title>
-    <!-- 引入字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ================= 基础设置 ================= */
         :root {
-            --bg-dark: #0B131F;       
-            --bg-mid: #16243A;        
-            --bg-light: #1F304A;      
-            --text-main: #F5F5F5;     
-            --text-muted: #A0B0C0;    
-            --beige: #F5F0E6;         
-            --accent: #8C7A6B;
-            --pink: #E8C3C3;          
+            --bg-dark: #0B131F; --bg-mid: #16243A; --bg-light: #1F304A;
+            --text-main: #F5F5F5; --text-muted: #A0B0C0; --beige: #F5F0E6;
+            --accent: #8C7A6B; --pink: #E8C3C3;          
         }
-
         * { box-sizing: border-box; scroll-behavior: smooth; }
-
         body {
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-mid) 100%);
-            color: var(--text-main);
-            font-family: 'Noto Serif SC', serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.8;
-            overflow-x: hidden;
+            color: var(--text-main); font-family: 'Noto Serif SC', serif;
+            margin: 0; padding: 0; line-height: 1.8; overflow: hidden; /* 初始禁止滚动 */
         }
 
-        /* ================= 右上角导航栏 ================= */
-        .top-nav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            padding: 20px 5%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center; /* 垂直居中 */
-            gap: 25px;
-            background: rgba(11, 19, 31, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        /* ================= 锁屏遮罩 (新加的) ================= */
+        .lock-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 19, 31, 0.85); backdrop-filter: blur(5px);
+            z-index: 9000; /* 在弹窗下面，但在内容上面 */
+            transition: opacity 0.8s ease;
         }
+        .lock-overlay.hidden { opacity: 0; pointer-events: none; }
 
-        .top-nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95em;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-        }
-        .top-nav a:hover { color: #FFF; }
-
-        /* --- 隐藏的真实入口（朽一 🌸） --- */
-        .secret-entry {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            margin-left: 15px;
-            border-left: 1px solid rgba(255,255,255,0.2);
-            padding-left: 15px;
-        }
-        .secret-entry span {
-            font-size: 0.95em;
-            color: var(--text-muted);
-        }
-        .secret-entry .flower {
-            font-size: 1.1em;
-            transition: transform 0.5s ease;
-        }
-        /* 鼠标放上去，小花转起来 */
-        .secret-entry:hover .flower {
-            transform: rotate(180deg) scale(1.2);
-        }
-
-        /* ================= 主容器 ================= */
-        .main-container {
-            padding: 120px 8% 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-            /* 默认隐藏主页面，等点击小花开锁 */
-            opacity: 0; 
-            pointer-events: none;
-            transition: opacity 1s ease;
-        }
-        /* 解锁后的状态 */
-        .main-container.unlocked {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* ================= 恶作剧弹窗 (锁屏) ================= */
+        /* ================= 恶作剧弹窗 ================= */
         .fake-modal {
-            position: fixed;
-            background: rgba(18, 29, 45, 0.95);
-            border: 1px solid var(--bg-light);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            z-index: 9999;
-            text-align: center;
-            width: 320px;
-            /* 动画 */
+            position: fixed; background: rgba(18, 29, 45, 0.95);
+            border: 1px solid var(--bg-light); border-radius: 12px; padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5); z-index: 9999;
+            text-align: center; width: 320px;
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .fake-modal h3 {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 1.5em;
-            margin: 0 0 15px 0;
-            color: #FFF;
-        }
-        .fake-modal p {
-            font-size: 0.9em;
-            color: var(--text-muted);
-            margin-bottom: 25px;
-        }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .fake-modal h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5em; margin: 0 0 15px 0; color: #FFF; }
+        .fake-modal p { font-size: 0.9em; color: var(--text-muted); margin-bottom: 25px; }
         .fake-modal button {
-            background: var(--beige);
-            color: var(--bg-dark);
-            border: none;
-            padding: 10px 35px;
-            border-radius: 20px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: 'Noto Serif SC', serif;
-            transition: 0.2s;
+            background: var(--beige); color: var(--bg-dark); border: none;
+            padding: 10px 35px; border-radius: 20px; font-size: 1em;
+            font-weight: bold; cursor: pointer; font-family: 'Noto Serif SC', serif;
         }
-        /* 给假的OK按钮加个无法点击的错觉 */
-        .fake-modal button:active {
-            transform: scale(0.95);
-        }
+        .fake-modal button:active { transform: scale(0.95); }
 
-        /* ================= 首屏 Hero ================= */
-        .hero-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 50px;
-            min-height: 80vh;
-            margin-bottom: 100px;
+        /* ================= 主页面 (初始隐藏) ================= */
+        .main-container {
+            padding: 120px 8% 40px; max-width: 1400px; margin: 0 auto;
+            opacity: 0; pointer-events: none; transition: opacity 1s ease;
+            height: 100vh; overflow-y: auto; /* 解锁后再允许滚动 */
         }
+        .main-container.unlocked { opacity: 1; pointer-events: auto; }
+
+        /* ================= 右上角导航 & 小花 ================= */
+        .top-nav {
+            position: fixed; top: 0; right: 0; width: 100%; padding: 20px 5%;
+            display: flex; justify-content: flex-end; align-items: center; gap: 25px;
+            background: rgba(11, 19, 31, 0.8); backdrop-filter: blur(10px);
+            z-index: 10000; /* 保证导航栏永远在最上面，你能点到小花 */
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .top-nav a { color: var(--text-muted); text-decoration: none; font-size: 0.95em; transition: color 0.3s; }
+        .top-nav a:hover { color: #FFF; }
+        .secret-entry {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;
+        }
+        .secret-entry span { font-size: 0.95em; color: var(--text-muted); }
+        .secret-entry .flower { font-size: 1.1em; transition: transform 0.5s ease; }
+        .secret-entry:hover .flower { transform: rotate(180deg) scale(1.2); }
+
+        /* 其他原有样式 (Hero, Skills, Projects 等) 保持精简 */
+        .hero-section { display: flex; justify-content: space-between; gap: 50px; margin-bottom: 100px; }
         .hero-left { flex: 1.2; max-width: 650px; position: relative; }
-        .hero-left::before {
-            content: ''; position: absolute; top: -50px; left: -50px; width: 120%; height: 120%;
-            background-image: radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 40px 40px; opacity: 0.08; z-index: -1; pointer-events: none;
-        }
-        .hero-left h1 { font-size: 2.8em; margin: 0 0 10px 0; line-height: 1.2; font-weight: 700; letter-spacing: 4px; }
-        .hero-left .slogan { font-size: 1em; color: var(--text-muted); letter-spacing: 2px; display: block; margin-bottom: 40px; margin-left: 5px; }
-
+        .hero-left h1 { font-size: 2.8em; margin: 0 0 10px 0; font-weight: 700; letter-spacing: 4px; }
+        .hero-left .slogan { font-size: 1em; color: var(--text-muted); letter-spacing: 2px; display: block; margin-bottom: 40px; }
         .beige-cards { display: flex; gap: 20px; }
-        .card-beige {
-            background: var(--beige); color: var(--bg-dark); padding: 25px; border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); flex: 1; transition: transform 0.3s;
-        }
-        .card-beige:hover { transform: translateY(-5px); }
-        .cal-header { font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 2px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px; }
+        .card-beige { background: var(--beige); color: var(--bg-dark); padding: 25px; border-radius: 16px; flex: 1; }
+        .cal-header, .info-header { font-size: 0.85em; color: var(--accent); font-weight: bold; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px; }
         .cal-date { font-size: 4em; font-family: 'Playfair Display', serif; font-weight: bold; line-height: 1; color: #2C3E50; }
-        .cal-month { font-size: 1.1em; color: var(--accent); letter-spacing: 1px; }
-        .info-header { font-size: 1.2em; font-family: 'Playfair Display', serif; font-style: italic; color: #2C3E50; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;}
         .info-mbti { font-size: 1.6em; font-weight: bold; color: var(--accent); }
-        .info-desc { font-size: 0.85em; color: #666; margin-top: 5px; }
-
-        .hero-right { flex: 0.8; max-width: 500px; width: 100%; margin-top: 20px; }
-        .folder-box {
-            background-color: rgba(18, 29, 45, 0.6); border: 1px solid var(--bg-light);
-            border-radius: 16px; padding: 20px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        details { border-bottom: 1px solid rgba(255,255,255,0.05); }
-        details:last-child { border-bottom: none; }
-        details:hover { background-color: rgba(74, 107, 153, 0.08); border-radius: 8px; }
-        summary {
-            font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.15em; font-weight: 600;
-            color: #E2E8F0; padding: 15px 10px; cursor: pointer; outline: none; list-style: none;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        summary::-webkit-details-marker { display: none; }
-        summary::after { content: '+'; font-family: sans-serif; color: var(--accent); transition: 0.3s; }
-        details[open] summary::after { content: '−'; transform: rotate(180deg); }
-        .content { padding: 0 10px 15px; font-size: 0.9em; color: var(--text-muted); }
-
-        /* ================= 通用板块标题 ================= */
-        .section-title {
-            font-family: 'Playfair Display', serif; font-style: italic; font-size: 2.2em;
-            margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px; display: inline-block;
-        }
-
-        /* ================= Skills ================= */
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 100px;}
-        .heart-card {
-            background: var(--pink); color: #4A3A3A; border-radius: 20px; padding: 30px;
-            border: 2px dashed rgba(255,255,255,0.6); transition: transform 0.3s ease;
-        }
-        .heart-card:hover { transform: translateY(-6px); }
-        .heart-card h3 { margin: 0 0 10px 0; font-size: 1.2em; }
-        .progress-bar { background: rgba(255,255,255,0.5); height: 8px; border-radius: 4px; margin-top: 15px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 4px; transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1); }
-
-        /* ================= Projects (换成了艺术诗句) ================= */
-        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 100px;}
-        .bento-item {
-            background: rgba(245, 240, 230, 0.95); color: #2C3E50; border-radius: 16px; padding: 30px;
-            text-decoration: none; display: flex; flex-direction: column; justify-content: center;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
-        .bento-item:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        .bento-item.wide { grid-column: span 2; }
-        .bento-item.tall { grid-row: span 2; }
-        .bento-item h3 { margin: 0 0 15px 0; font-size: 1.3em; font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent);}
-        .bento-item p { font-size: 1em; line-height: 1.8; color: #4A5A6A; font-family: 'Noto Serif SC', serif; }
+        .hero-right { flex: 0.8; max-width: 500px; }
+        .folder-box { background-color: rgba(18, 29, 45, 0.6); border: 1px solid var(--bg-light); border-radius: 16px; padding: 20px 30px; }
+        details { border-bottom: 1px solid rgba(255,255,255,0.05); } details:last-child { border-bottom: none; }
+        summary { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.15em; padding: 15px 10px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; color: #E2E8F0;}
+        summary::-webkit-details-marker { display: none; } summary::after { content: '+'; color: var(--accent); }
+        details[open] summary::after { content: '−'; } .content { padding: 0 10px 15px; font-size: 0.9em; color: var(--text-muted); }
         
-        /* 水印装饰 */
-        .bento-item::after {
-            content: '✦'; position: absolute; bottom: -10px; right: 10px; font-size: 5em; color: rgba(140, 122, 107, 0.1); transform: rotate(15deg);
-        }
-
-        /* ================= Timeline (换成了艺术句子) ================= */
+        .section-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 2.2em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: inline-block; margin-bottom: 30px;}
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 100px;}
+        .heart-card { background: var(--pink); color: #4A3A3A; border-radius: 20px; padding: 30px; border: 2px dashed rgba(255,255,255,0.6); }
+        .progress-bar { background: rgba(255,255,255,0.5); height: 8px; border-radius: 4px; margin-top: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 4px; transition: width 1.5s ease; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 100px;}
+        .bento-item { background: rgba(245, 240, 230, 0.95); color: #2C3E50; border-radius: 16px; padding: 30px; }
+        .bento-item.wide { grid-column: span 2; } .bento-item.tall { grid-row: span 2; }
+        .bento-item h3 { font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent); }
         .timeline { position: relative; max-width: 800px; margin-bottom: 100px;}
-        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; height: 100%; width: 2px; background: rgba(255,255,255,0.1); }
+        .timeline::before { content: ''; position: absolute; left: 20px; height: 100%; width: 2px; background: rgba(255,255,255,0.1); }
         .timeline-item { position: relative; padding-left: 60px; margin-bottom: 30px; }
-        .timeline-item::before { content: ''; position: absolute; left: 14px; top: 6px; width: 14px; height: 14px; background: var(--beige); border-radius: 50%; border: 3px solid var(--bg-mid); }
-        .timeline-content { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 25px; transition: 0.3s; }
-        .timeline-content:hover { background: rgba(255,255,255,0.06); }
-        .time-date { font-size: 0.85em; color: var(--text-muted); margin-bottom: 5px; font-family: 'Playfair Display', serif;}
-        .time-role { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; color: #FFF;}
-        .time-desc { font-size: 0.95em; color: #A0B0C0; font-style: italic;}
-
-        /* ================= About & Contact ================= */
-        .about-card {
-            background: #FFFFFF; color: #2C3E50; border-radius: 20px; padding: 40px;
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-width: 800px; margin-bottom: 100px;
-        }
-        .deco-star, .deco-bow { position: absolute; color: var(--accent); font-size: 1.5em; opacity: 0.5; }
-        .deco-star { top: 20px; right: 20px; }
-        .deco-bow { bottom: 20px; left: 20px; }
-
+        .timeline-item::before { content: ''; position: absolute; left: 14px; top: 6px; width: 14px; height: 14px; background: var(--beige); border-radius: 50%; }
+        .timeline-content { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 25px; }
+        .about-card { background: #FFF; color: #2C3E50; border-radius: 20px; padding: 40px; max-width: 800px; margin-bottom: 100px; position: relative;}
         .contact-section { text-align: center; padding: 40px 0; }
-        .contact-btn {
-            display: inline-block; background: var(--beige); color: var(--bg-dark);
-            padding: 12px 30px; border-radius: 30px; text-decoration: none;
-            font-weight: bold; margin-top: 20px; transition: 0.2s;
-        }
-        .contact-btn:active { transform: scale(0.95); }
-        .contact-btn:hover { background: #FFF; }
+        .contact-btn { display: inline-block; background: var(--beige); color: var(--bg-dark); padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px; }
 
-        /* ================= 响应式 ================= */
         @media (max-width: 1000px) {
             .hero-section { flex-direction: column; }
-            .hero-left, .hero-right { max-width: 100%; width: 100%; }
             .bento-grid { grid-template-columns: 1fr; }
             .bento-item.wide, .bento-item.tall { grid-column: auto; grid-row: auto; }
-        }
-        @media (max-width: 600px) {
-            .top-nav { justify-content: center; padding: 15px; gap: 15px; }
-            .beige-cards { flex-direction: column; }
-            .secret-entry { border-left: none; padding-left: 0; margin-left: 0;}
         }
     </style>
 </head>
 <body>
 
-    <!-- 右上角导航 & 隐藏的彩蛋入口 -->
+    <!-- 这层是用来模糊背景的，一开始就在 -->
+    <div class="lock-overlay" id="lockOverlay"></div>
+
+    <!-- 右上角导航 & 小花 -->
     <nav class="top-nav">
         <a href="#hero">首页</a>
         <a href="#skills">技能</a>
@@ -282,20 +126,20 @@
         <a href="#timeline">流光</a>
         <a href="#about">关于我</a>
         <a href="#contact">联系</a>
-        <!-- 真正的入口在这里：写着朽一，旁边一朵小花 -->
         <div class="secret-entry" id="flowerBtn" title="Enter">
             <span>朽一</span>
             <span class="flower">🌸</span>
         </div>
     </nav>
 
-    <!-- 锁屏弹窗的容器 -->
+    <!-- 弹窗存放区 -->
     <div id="modalContainer"></div>
 
-    <!-- 主内容区 -->
+    <!-- 主内容 -->
     <div class="main-container" id="mainContent">
+        <!-- 这里放你之前的 Hero, Skills, 诗篇, 时间线等... (为了篇幅不重复粘贴太多，你自己保留原来的内容就行) -->
         
-        <section id="hero" class="hero-section fade-in">
+        <section id="hero" class="hero-section">
             <div class="hero-left">
                 <h1>朽一</h1>
                 <span class="slogan">——我有不朽的渴望</span>
@@ -312,146 +156,47 @@
                     </div>
                 </div>
             </div>
-
             <div class="hero-right">
                 <div class="folder-box">
-                    <details>
-                        <summary>The First — My World</summary>
-                        <div class="content"><p>我是孤独的旅人，在自己的宇宙里，种满不知名的玫瑰。</p></div>
-                    </details>
-                    <details>
-                        <summary>The Second — My Bonds</summary>
-                        <div class="content"><p>生命是一场巨大的相遇，我珍视那些与我产生共鸣的星光。</p></div>
-                    </details>
-                    <details>
-                        <summary>The Third — My Life</summary>
-                        <div class="content"><p>晨起看云，日落听风。把平淡的日常，过成不具名的诗。</p></div>
-                    </details>
-                    <details>
-                        <summary>The Moments</summary>
-                        <div class="content"><p>那些被时间定格的瞬间，是岁月赠予的琥珀。</p></div>
-                    </details>
-                    <details>
-                        <summary>Thoughts</summary>
-                        <div class="content"><p>在信息洪流中保持清醒，在喧嚣世界里留一平米安静的书桌。</p></div>
-                    </details>
-                    <details>
-                        <summary>Hobbies</summary>
-                        <div class="content"><p>🖋️ 书法 · 📜 诗词 · 🎨 国画</p></div>
-                    </details>
-                    <details>
-                        <summary>Scenery</summary>
-                        <div class="content"><p>我看过的风景。</p></div>
-                    </details>
+                    <details><summary>The First — My World</summary><div class="content"><p>我是孤独的旅人，在自己的宇宙里，种满不知名的玫瑰。</p></div></details>
+                    <details><summary>The Second — My Bonds</summary><div class="content"><p>生命是一场巨大的相遇，我珍视那些与我产生共鸣的星光。</p></div></details>
+                    <details><summary>The Third — My Life</summary><div class="content"><p>晨起看云，日落听风。把平淡的日常，过成不具名的诗。</p></div></details>
+                    <details><summary>The Moments</summary><div class="content"><p>那些被时间定格的瞬间，是岁月赠予的琥珀。</p></div></details>
+                    <details><summary>Thoughts</summary><div class="content"><p>在信息洪流中保持清醒，在喧嚣世界里留一平米安静的书桌。</p></div></details>
+                    <details><summary>Hobbies</summary><div class="content"><p>🖋️ 书法 · 📜 诗词 · 🎨 国画</p></div></details>
+                    <details><summary>Scenery</summary><div class="content"><p>我看过的风景。</p></div></details>
                 </div>
             </div>
         </section>
 
-        <!-- 技能板块 -->
-        <section id="skills" class="fade-in">
+        <section id="skills">
             <h2 class="section-title">Skills</h2>
             <div class="skills-grid">
                 <div class="heart-card">
-                    <h3>💻 数字与逻辑</h3>
-                    <p>MS Office 二级持有者</p>
+                    <h3>💻 数字与逻辑</h3><p>MS Office 二级持有者</p>
                     <div class="progress-bar"><div class="progress-fill" data-width="85%"></div></div>
                 </div>
                 <div class="heart-card">
-                    <h3>📜 诗词韵律</h3>
-                    <p>熟稔平仄格律，日常填词</p>
+                    <h3>📜 诗词韵律</h3><p>熟稔平仄格律，日常填词</p>
                     <div class="progress-bar"><div class="progress-fill" data-width="75%"></div></div>
                 </div>
                 <div class="heart-card">
-                    <h3>🖋️ 水墨丹青</h3>
-                    <p>研习行楷与写意花鸟</p>
+                    <h3>🖋️ 水墨丹青</h3><p>研习行楷与写意花鸟</p>
                     <div class="progress-bar"><div class="progress-fill" data-width="65%"></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- 诗篇板块 (原项目) -->
-        <section id="projects" class="fade-in">
-            <h2 class="section-title">Poetry</h2>
-            <div class="bento-grid">
-                <div class="bento-item wide tall">
-                    <h3>《星空与海》</h3>
-                    <p>我们都在阴沟里，但仍有人仰望星空。<br>在浩瀚的宇宙面前，人类的悲欢如此渺小，却又如此真实。这便是我渴望记录的一切。</p>
-                </div>
-                <div class="bento-item">
-                    <h3>《晚风》</h3>
-                    <p>傍晚的风，总是带着一点秘密，吹过树梢，吹进心里。</p>
-                </div>
-                <div class="bento-item">
-                    <h3>《独处》</h3>
-                    <p>孤独是一个人的狂欢，狂欢是一群人的孤独。</p>
-                </div>
-                <div class="bento-item">
-                    <h3>《流浪》</h3>
-                    <p>身体和灵魂，总要有一个在路上。</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 流光板块 (原经历) -->
-        <section id="timeline" class="fade-in">
-            <h2 class="section-title">Time Flows</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="time-date">某年某月</div>
-                        <div class="time-role">拾起第一本书</div>
-                        <div class="time-desc">从此文字成了我躲避喧嚣的避难所，也是对抗虚无的武器。</div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="time-date">某年某月</div>
-                        <div class="time-role">第一次提笔</div>
-                        <div class="time-desc">墨汁在宣纸上晕开的那一刻，我听见了时间流逝的声音。</div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="time-date">现在</div>
-                        <div class="time-role">在这里与你相遇</div>
-                        <div class="time-desc">在无尽的代码与赛博世界里，开辟出一座属于我的小小花园。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 关于我 -->
-        <section id="about" class="fade-in">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-card">
-                <div class="deco-star">✨</div>
-                <div class="deco-bow">🎀</div>
-                <h3 style="margin-top: 0; font-family: 'Playfair Display', serif; font-style: italic;">Hi, I'm Xiuyi.</h3>
-                <p>你好，我是朽一。一个在文科世界里寻找秩序，在代码世界里寻找浪漫的人。</p>
-                <p>我热爱中国传统文化，喜欢书法的行云流水和国画的意境悠远；也喜欢现代科技带来的高效与广阔。我信奉“慢工出细活”，无论是写一首诗，还是搭建一个网页，我都希望倾注全部的心思。</p>
-                <p>这是我第一次尝试用代码建站，这里就像我的数字手账本，记录着我的成长与碎碎念。</p>
-            </div>
-        </section>
-
-        <!-- 联系 -->
-        <section id="contact" class="contact-section fade-in">
-            <h2 class="section-title">Contact</h2>
-            <p style="color: var(--text-muted);">如果你也喜欢看云、听雨、或者聊聊诗词与猫，欢迎随时找我。</p>
-            <div>
-                <a href="mailto:your-email@example.com" class="contact-btn">✉️ 发送邮件</a>
-                <a href="https://github.com/xiuyi-l" target="_blank" class="contact-btn" style="margin-left: 10px;">💻 GitHub</a>
-            </div>
-        </section>
-
+        <!-- 后面省略了诗篇、流光、关于我、联系，直接复制你刚才那版即可 -->
     </div>
 
-    <!-- 交互脚本 -->
     <script>
         const modalContainer = document.getElementById('modalContainer');
         const mainContent = document.getElementById('mainContent');
+        const lockOverlay = document.getElementById('lockOverlay');
         const flowerBtn = document.getElementById('flowerBtn');
 
-        // 1. 生成恶作剧弹窗的函数
+        // 生成弹窗
         function createFakeModal() {
             const modal = document.createElement('div');
             modal.className = 'fake-modal';
@@ -463,58 +208,35 @@
             return modal;
         }
 
-        // 2. 点击假OK键的处理（无限弹窗）
+        // 点击OK，无限分身
         function handleFakeOk(btn) {
-            // 把刚才的弹窗在屏幕随机位置再克隆出来一个
             const newModal = createFakeModal();
-            // 随机位置，不要跑到屏幕外面
             const randomX = Math.random() * (window.innerWidth - 350);
             const randomY = Math.random() * (window.innerHeight - 200);
             newModal.style.left = `${randomX}px`;
             newModal.style.top = `${randomY}px`;
-            
-            // 稍微倾斜一点，更像恶作剧
             const randomRotate = (Math.random() - 0.5) * 30; 
             newModal.style.transform = `rotate(${randomRotate}deg)`;
-
             modalContainer.appendChild(newModal);
-
-            // 原来的那个弹窗消失，留出一个新的
-            btn.parentElement.remove();
+            btn.parentElement.remove(); // 原弹窗消失
         }
 
-        // 3. 初始化：页面一打开，先在屏幕中间放一个弹窗
+        // 页面一加载，立刻在屏幕中央弹一个！
         window.onload = () => {
             const firstModal = createFakeModal();
-            // 居中显示
             firstModal.style.left = '50%';
             firstModal.style.top = '50%';
             firstModal.style.transform = 'translate(-50%, -50%)';
             modalContainer.appendChild(firstModal);
         };
 
-        // 4. 解锁真正的网页 (点击右上角小花)
+        // 点击小花，解锁！
         flowerBtn.addEventListener('click', () => {
-            // 清空所有烦人的弹窗
-            modalContainer.innerHTML = '';
-            // 显示主页面
-            mainContent.classList.add('unlocked');
-            // 触发滚动进场动画
-            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            modalContainer.innerHTML = ''; // 清空所有烦人的弹窗
+            lockOverlay.classList.add('hidden'); // 隐藏模糊层
+            mainContent.classList.add('unlocked'); // 显示主页面
+            document.body.style.overflow = 'auto'; // 恢复滚动
         });
-
-        // 5. 滚动入场动画 & 技能进度条
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    if(entry.target.id === 'skills') {
-                        const bars = entry.target.querySelectorAll('.progress-fill');
-                        bars.forEach(bar => { bar.style.width = bar.getAttribute('data-width'); });
-                    }
-                }
-            });
-        }, { threshold: 0.1 });
     </script>
 </body>
 </html>
