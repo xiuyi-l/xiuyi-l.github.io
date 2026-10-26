@@ -208,6 +208,63 @@
             .beige-cards { flex-direction: column; }
             .secret-entry { border-left: none; padding-left: 0; margin-left: 0;}
         }
+
+        /* ================= My World 简约时间轴 ================= */
+        .moments-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FDFDFB; z-index: 20000;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            overflow-y: auto; font-family: 'Noto Serif SC', serif;
+        }
+        .moments-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .moments-back {
+            position: fixed; top: 20px; left: 20px; z-index: 20001;
+            background: transparent; color: #1F304A; border: 1px solid #1F304A;
+            padding: 8px 22px; border-radius: 24px; cursor: pointer;
+            font-size: 0.9em; letter-spacing: 2px;
+            font-family: 'Noto Serif SC', serif; display: none;
+            transition: background 0.3s, color 0.3s;
+        }
+        .moments-back:hover { background: #1F304A; color: #FFF; }
+        .moments-back.show { display: block; }
+
+        .moments-page { max-width: 680px; margin: 0 auto; padding: 90px 24px 100px; }
+
+        .moments-header { text-align: center; margin-bottom: 80px; }
+        .moments-header h2 {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: 2.2em; color: #1F304A; margin: 0 0 8px 0; letter-spacing: 3px;
+        }
+        .moments-header p { color: #9AA7B5; font-size: 0.85em; letter-spacing: 4px; margin: 0; }
+
+        /* 时间轴主体 */
+        .tl { position: relative; padding-left: 40px; }
+        .tl::before {
+            content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px;
+            width: 1px; background: #1F304A; opacity: 0.35;
+        }
+        .tl-item { position: relative; margin-bottom: 70px; }
+        .tl-item:last-child { margin-bottom: 0; }
+        .tl-item::before {
+            content: ''; position: absolute; left: -39px; top: 8px;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #FDFDFB; border: 2px solid #1F304A;
+        }
+        .tl-date {
+            font-family: 'Playfair Display', serif; font-size: 1.05em;
+            color: #1F304A; letter-spacing: 2px; margin-bottom: 4px;
+        }
+        .tl-place {
+            font-size: 1.5em; font-weight: bold; color: #16243A;
+            letter-spacing: 6px; margin-bottom: 18px;
+        }
+        .tl-img { border-radius: 4px; overflow: hidden; box-shadow: 0 8px 28px rgba(22, 36, 58, 0.10); }
+        .tl-img img { width: 100%; display: block; }
+
+        @media (max-width: 600px) {
+            .moments-page { padding: 80px 18px 80px; }
+        }
     </style>
 </head>
 <body>
@@ -232,6 +289,44 @@
     <!-- 恶作剧弹窗生成区 -->
     <div id="modalContainer"></div>
 
+    <!-- My World 简约时间轴弹层 -->
+    <button class="moments-back" id="momentsBack">← 返回</button>
+    <div class="moments-overlay" id="momentsOverlay">
+        <div class="moments-page">
+            <div class="moments-header">
+                <h2>My World</h2>
+                <p>天地苦求 虔念自由</p>
+            </div>
+            <div class="tl">
+                <div class="tl-item">
+                    <div class="tl-date">2025 . 11</div>
+                    <div class="tl-place">洛 阳</div>
+                    <div class="tl-img"><img src="images/world1.jpg" alt="洛阳"></div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">2026 . 04</div>
+                    <div class="tl-place">大 连</div>
+                    <div class="tl-img"><img src="images/world2.jpg" alt="大连"></div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">2026 . 05</div>
+                    <div class="tl-place">南 京</div>
+                    <div class="tl-img"><img src="images/world3.jpg" alt="南京"></div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">2026 . 07</div>
+                    <div class="tl-place">大 同</div>
+                    <div class="tl-img"><img src="images/world4.jpg" alt="大同"></div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">2026 . 09</div>
+                    <div class="tl-place">天 津</div>
+                    <div class="tl-img"><img src="images/world5.jpg" alt="天津"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 主内容区 -->
     <div class="main-container" id="mainContent">
         
@@ -249,7 +344,7 @@
                     <div class="card-beige">
                         <div class="info-header">personal messages</div>
                         <div class="info-mbti">ENF(P+J)</div>
-                        <div class="info-desc">“偏爱电影、猫、与深夜游荡。”</div>
+                        <div class="info-desc">“天地阔 且徜徉”</div>
                     </div>
                 </div>
             </div>
@@ -258,23 +353,23 @@
                 <div class="folder-box">
                     <details>
                         <summary>The First — My World</summary>
-                        <div class="content"><p>我是孤独的旅人，在自己的宇宙里，种满不知名的玫瑰。</p></div>
+                        <div class="content"><p>心中有天地何处不逍遥</p></div>
                     </details>
                     <details>
                         <summary>The Second — My Bonds</summary>
-                        <div class="content"><p>生命是一场巨大的相遇，我珍视那些与我产生共鸣的星光。</p></div>
+                        <div class="content"><p>万物与我都是荒诞的静寂，</p></div>
                     </details>
                     <details>
                         <summary>The Third — My Life</summary>
-                        <div class="content"><p>晨起看云，日落听风。把平淡的日常，过成不具名的诗。</p></div>
+                        <div class="content"><p>人海阔，无日不风波。</p></div>
                     </details>
                     <details>
                         <summary>The Moments</summary>
-                        <div class="content"><p>那些被时间定格的瞬间，是岁月赠予的琥珀。</p></div>
+                        <div class="content"><p>与每个人的相遇全都是难衡量的缘分。</p></div>
                     </details>
                     <details>
                         <summary>Thoughts</summary>
-                        <div class="content"><p>在信息洪流中保持清醒，在喧嚣世界里留一平米安静的书桌。</p></div>
+                        <div class="content"><p>悲喜为筹，终有新篇。</p></div>
                     </details>
                     <details>
                         <summary>Hobbies</summary>
@@ -282,7 +377,7 @@
                     </details>
                     <details>
                         <summary>Scenery</summary>
-                        <div class="content"><p>我看过的风景。</p></div>
+                        <div class="content"><p>希望太阳多多是个好天气。</p></div>
                     </details>
                 </div>
             </div>
@@ -299,12 +394,12 @@
                 </div>
                 <div class="heart-card">
                     <h3>📜 诗词韵律</h3>
-                    <p>熟稔平仄格律，日常填词</p>
+                    <p>平仄格律，日常填词</p>
                     <div class="progress-bar"><div class="progress-fill" data-width="75%"></div></div>
                 </div>
                 <div class="heart-card">
                     <h3>🖋️ 水墨丹青</h3>
-                    <p>研习行楷与写意花鸟</p>
+                    <p>研习笔墨与写意花鸟</p>
                     <div class="progress-bar"><div class="progress-fill" data-width="65%"></div></div>
                 </div>
             </div>
@@ -368,16 +463,22 @@
                 <div class="deco-star">✨</div>
                 <div class="deco-bow">🎀</div>
                 <h3 style="margin-top: 0; font-family: 'Playfair Display', serif; font-style: italic;">Hi, I'm Xiuyi.</h3>
-                <p>你好，我是朽一。一个在文科世界里寻找秩序，在代码世界里寻找浪漫的人。</p>
-                <p>我热爱中国传统文化，喜欢书法的行云流水和国画的意境悠远；也喜欢现代科技带来的高效与广阔。我信奉“慢工出细活”，无论是写一首诗，还是搭建一个网页，我都希望倾注全部的心思。</p>
-                <p>这是我第一次尝试用代码建站，这里就像我的数字手账本，记录着我的成长与碎碎念。</p>
+                <p>在每一个河岸每一个海边每一个山峰每一个小路停留，跟着水流走，跟着落日跑。</p>
+                <p>思情满怀，行路万里。</p>
+                <p>不在乎得失，即使背负行囊徒步</p>
+                <p>不恐惧未来，无论天气时好时坏</p>
+                <p>不困于羁绊，远离温情伤心离别</p>
+                <p>翻阅前人词句寻共感，自作诗篇把酒长吟，</p>
+                <p>竹林里青苔石阶木屋，风卷笔画墨香更浓。</p>
+                <p>胸中大志，李时珍司马迁徐霞客</p>
+                <p>宇宙 地球 国域 山河 村落 朝阳 米粮 好眠</p>
             </div>
         </section>
 
         <!-- Contact 联系 -->
         <section id="contact" class="contact-section fade-in">
             <h2 class="section-title">Contact</h2>
-            <p style="color: var(--text-muted);">如果你也喜欢看云、听雨、或者聊聊诗词与猫，欢迎随时找我。</p>
+            <p style="color: var(--text-muted);">如果你也喜欢看云、听雨、或者聊聊诗词与旅行，欢迎随时找我。</p>
             <div>
                 <a href="mailto:your-email@example.com" class="contact-btn">✉️ 发送邮件</a>
                 <a href="https://github.com/xiuyi-l" target="_blank" class="contact-btn" style="margin-left: 10px;">💻 GitHub</a>
@@ -458,6 +559,28 @@
                 }
             });
         }, { threshold: 0.1 });
+    </script>
+
+    <!-- ================= My World 朋友圈时间轴交互 ================= -->
+    <script>
+        const myWorldCard = document.querySelector('.folder-box details');
+        const momentsOverlay = document.getElementById('momentsOverlay');
+        const momentsBack = document.getElementById('momentsBack');
+
+        // 点击 My World 卡片标题进入朋友圈时间轴
+        myWorldCard.querySelector('summary').addEventListener('click', (e) => {
+            e.preventDefault(); // 不展开折叠，直接打开时间轴
+            momentsOverlay.classList.add('open');
+            momentsBack.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // 返回主页面
+        momentsBack.addEventListener('click', () => {
+            momentsOverlay.classList.remove('open');
+            momentsBack.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
     </script>
 </body>
 </html>
